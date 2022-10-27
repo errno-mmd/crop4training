@@ -1,6 +1,8 @@
 # crop4training
 Crop images for training of AI, focusing on a person in each image
 
+![example](https://raw.githubusercontent.com/errno-mmd/crop4training/image/crop_example.png)
+
 ## Prerequirement
 
 You need to install the following libraries to run crop4training.
