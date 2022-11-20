@@ -5,6 +5,7 @@ import cv2
 import mediapipe as mp
 import pathlib
 import re
+from mimetypes import guess_type
 
 def locate_crop_box(people_bbox, face_bbox, width, height):
     px, py, pw, ph = people_bbox
@@ -155,6 +156,12 @@ def save_detection_result(file_path, image, people_bbox, face_bbox):
     result_image = draw_face_bbox(result_image, [face_bbox])
     cv2.imwrite(str(file_path), result_image)
 
+def is_image_file(filename):
+    (file_type, tmp) = guess_type(filename)
+    if (re.match(r'image', file_type)):
+        return True
+    return False
+
 def batch_crop_images(input_dir, output_dir, width, height, no_focus, detection_save_dir):
     input_dir_path = pathlib.Path(input_dir).resolve()
     output_dir_path = pathlib.Path(output_dir).resolve()
@@ -165,7 +172,7 @@ def batch_crop_images(input_dir, output_dir, width, height, no_focus, detection_
         detection_dir_path.mkdir(parents=True, exist_ok=True)
 
     for input_file_path in input_dir_path.glob("*"):
-        if not re.search('.(png|jpeg|jpg|bmp)$', str(input_file_path), flags=re.IGNORECASE):
+        if not is_image_file(input_file_path):
             continue
         print(input_file_path)
         image = cv2.imread(str(input_file_path))
